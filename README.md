@@ -24,12 +24,11 @@ This informal document serves as a brief(?) introduction to our hackweek project
  
 The highest priority is probably the AIA Prep flow, but all of the paths are a worthy use of our time. We have enough people on the team that we can tackle multiple objectives, if so desired.
  
-*(The following sections borrow liberally from [the AIApy PSF Example](https://aiapy.readthedocs.io/en/latest/generated/gallery/skip_psf_deconvolution.html), the [AIApy prep example](https://aiapy.readthedocs.io/en/latest/generated/gallery/prepping_level_1_data.html), and the AIApy source code
-; also see [Grigis et al. 2012](https://hesperia.gsfc.nasa.gov/ssw/sdo/aia/idl/psf/DOC/psfreport.pdf) for further PSF technical details. I thank Will Barnes for helpful discussions in understanding the basic challenges of accelerating AIApy.)*
+*(The following sections borrow liberally from [the AIApy PSF Example](https://aiapy.readthedocs.io/en/latest/generated/gallery/skip_psf_deconvolution.html), the [AIApy prep example](https://aiapy.readthedocs.io/en/latest/generated/gallery/prepping_level_1_data.html), and the [AIApy source code](https://gitlab.com/LMSAL_HUB/aia_hub/aiapy); also see [Grigis et al. 2012](https://hesperia.gsfc.nasa.gov/ssw/sdo/aia/idl/psf/DOC/psfreport.pdf) for further PSF technical details. I thank Will Barnes for helpful discussions in understanding the basic challenges of accelerating AIApy.)*
 
 ## 1. AIA Prep (Level 1 -> 1.5)
 ### Code Dive
-The `aia_prep` routine simply converts level 1 AIA data to level 1.5 AIA data. This basically means that the minimally processed (Level 0 -> Level 1 1) CCD data is stretched and translated to a standard format, including a common pointing, orientation, and plate scale for better comparison between different times. The minimal working example for this is:
+The `aia_prep` routine simply converts level 1 AIA data to level 1.5 AIA data. This basically means that the minimally processed (Level 0 -> Level 1) CCD data is stretched and translated to a standard format, including a common pointing, orientation, and plate scale for better comparison between different times. The minimal working example for this is:
 ```python
 import astropy.units as u
 from sunpy.net import Fido, attrs
@@ -65,7 +64,7 @@ tempmap = smap.rotate(recenter=True, scale=scale_factor.value,order=order,missin
 ### Acceleration
 In talking with Will (also see [this pull request](https://github.com/sunpy/sunpy/issues/3266)), it turns out that `smap.rotate` does not play nice with Dask. For our purposes, the key underlying function is `sunpy.image.transform.affine_transform`, which uses either `skimage.transform.warp` or `scipy.ndimage.interpolation.affine_transform`. However, although Sunpy does allow `smap` to use Dask arrays, there are no Dask equivalents for either `warp` or `affine_transformation`. One of our goals is thus to implement one (or both) of these into the Dask library (see the [related pull request](https://github.com/dask/dask-image/issues/24)). I am not aware of any progress on this, so we would have to essentially write these functions from scratch, test them, and make a pull request to the `dask-image` git repo. Alternatively, we could check for (or implement) CuPy/Numba versions of these affine transformation routines.
 
-*WARNING: the rest of this subsection is speculative from a non-Sunpy programmer/physicist. Feedback on this discussion would be helpful*
+*WARNING: the rest of this subsection is speculative from a non-Sunpy programmer/physicist. Feedback on this discussion would be helpful.*
 
 The other time sink is `sunpy.map.contains_full_disk`. I imagine that simply passing an option to disable this safety check would be a great speedup, but it does seem unsafe. Regardless, in profiling this function and following down all the way, it looks like most of the slowdown is in
 ```python
@@ -125,7 +124,7 @@ for order in diffraction_orders:
         psf += np.exp(-width_x*x_centered*x_centered
                       - width_y*y_centered*y_centered)*intensity
 ```
-Note the source code's helpful comment directing us to the bottleneck. This `exp` function operates piecewise on two 4096x4096 arrays (`x_centered` and `y_centered`); this calculation takes a bit over one second on my laptop. There are 200 diffraction orders and 4 entrance angles (two focal plane angles) to loop over; this means that `psf_entrance` above takes $\approx 1.2*200*4 = 960$ seconds, or 16 minutes. Similarly, `psf_focal_plane` does half as many loops and takes about 8 minutes. I imagine that if I had some kind of CPU multi-threading support, I could get this runtime lowered by some multiple.
+Note the source code's helpful comment directing us to the bottleneck. This `exp` function operates piecewise on two 4096x4096 arrays (`x_centered` and `y_centered`); this calculation takes a bit over one second on my laptop. There are 200 diffraction orders and 4 entrance angles (two focal plane angles) to loop over; this means that `psf_entrance` above takes about $1.2\times200\times4 = 960$ seconds, or 16 minutes. Similarly, `psf_focal_plane` does half as many loops and takes about 8 minutes. I imagine that if I had some kind of CPU multi-threading support, I could get this runtime lowered by some multiple GPU acceleration is still better, however.
 
 ### PSF Acceleration
 Will Barnes has already integrated CuPy into the `_psf` function by casting the `x`, `y`, and `psf` arrays in the above loop to CuPy/CUDA arrays via:
