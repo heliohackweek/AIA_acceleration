@@ -124,7 +124,7 @@ for order in diffraction_orders:
         psf += np.exp(-width_x*x_centered*x_centered
                       - width_y*y_centered*y_centered)*intensity
 ```
-Note the source code's helpful comment directing us to the bottleneck. This `exp` function operates piecewise on two 4096x4096 arrays (`x_centered` and `y_centered`); this calculation takes a bit over one second on my laptop. There are 200 diffraction orders and 4 entrance angles (two focal plane angles) to loop over; this means that `psf_entrance` above takes about $1.2\times200\times4 = 960$ seconds, or 16 minutes. Similarly, `psf_focal_plane` does half as many loops and takes about 8 minutes. I imagine that if I had some kind of CPU multi-threading support, I could get this runtime lowered by some multiple GPU acceleration is still better, however.
+Note the source code's helpful comment directing us to the bottleneck. This `exp` function operates piecewise on two 4096x4096 arrays (`x_centered` and `y_centered`); this calculation takes a bit over one second on my laptop. There are 200 diffraction orders and 4 entrance angles (two focal plane angles) to loop over; this means that `psf_entrance` above takes about $1.2\times200\times4 = 960$ seconds, or 16 minutes. Similarly, `psf_focal_plane` does half as many loops and takes about 8 minutes. I imagine that if I had some kind of CPU multi-threading support, I could get this runtime lowered by some multiple. GPU acceleration is still better, however.
 
 ### PSF Acceleration
 Will Barnes has already integrated CuPy into the `_psf` function by casting the `x`, `y`, and `psf` arrays in the above loop to CuPy/CUDA arrays via:
