@@ -14,6 +14,7 @@ This informal document serves as a brief(?) introduction to our hackweek project
 * PSF Deconvolution
     - test custom CuPy or Numba kernels against current CuPy implementation
     - develop pipeline of GPU asynchrononous memory transfer/deconvolution of multiple images concurrently
+    - Dask Version?
 * General Pipelining for multiple images
     - PSF only
     - Prep only ("Level 1.5" data)
@@ -155,6 +156,8 @@ for _ in range(iterations):
 which requires looping over some number of iterations of the L-R deconvolution algorithm. I'm not sure what the CuPy speed up is (compared to the 2 minutes on my laptop CPU). Again, I'm not sure how CuPy converts the loop instructions to the GPU execution, but I imagine any further speedup would require an implementation of the fft routines directly on the GPU (maybe via CUDA Rapids or CuPy or other L-R deconvolution libraries?).
 
 Another small speedup might be to more tightly integrate the psf calculation + deconvolution combination. The current `psf()` function casts the final calculated psf array back to the CPU, and then the `deconvolve()` function takes this array and recasts it back to the GPU; we could eliminate this transfer, especially for devonvolution of multiple images with the same psf.
+
+For Dask, it turns out that someone opened an [issue exploring implementing the deconvolution in Dask](https://github.com/dask/dask-image/issues/149); there is a linkthere to an interesting discussion on accelerating the FFT in Scipy. This could be another interesting avenue to explore.
 
 ## 3. Pipelining
 ### PSF Pipeline
