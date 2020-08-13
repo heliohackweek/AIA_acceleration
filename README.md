@@ -4,7 +4,7 @@ _author: Chris Bard_
 _2020/08/12_
 
 ---
-This informal document serves as a brief(?) introduction to our hackweek project: **accelerating AIApy**. This document will identify the code bottlenecks and propose some possible strategies for further improvement. There are two routines that we will be working on: "aia_prep" and PSF deconvolution. 
+This informal document serves as a brief(?) introduction to our hackweek project: **accelerating AIApy**. This document will identify some code bottlenecks and propose possible strategies for acceleration. There are two routines that we will mainly be working on: "aia_prep" and PSF deconvolution. 
 
 **tl;dr: Possible paths to take**:
 * AIA Prep (Level 1-> Level 1.5 data)
@@ -14,7 +14,7 @@ This informal document serves as a brief(?) introduction to our hackweek project
 * PSF Deconvolution
     - test custom CuPy or Numba kernels against current CuPy implementation
     - develop pipeline of GPU asynchrononous memory transfer/deconvolution of multiple images concurrently
-    - Dask Version?
+    - implement Dask version of deconvolution?
 * General Pipelining for multiple images
     - PSF only
     - Prep only ("Level 1.5" data)
