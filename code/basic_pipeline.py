@@ -58,7 +58,7 @@ def gen_deconv(lvl1_fname_list, lvl1_path):
     # finish for first image
     m_decov = aiapy.psf.deconvolve(m,psf=psf)
     new_name = af.replace('lev1', 'levDecv')
-    m_decov.save(lvl1.path+'/'+new_name)
+    m_decov.save(lvl1_path+'/'+new_name)
     print('deconvolved: {} at {}'.format(str(m_decov.wavelength),str(m_decov.date)))
 
     skipped_files = []
@@ -71,7 +71,7 @@ def gen_deconv(lvl1_fname_list, lvl1_path):
             continue
         m_decov = aiapy.psf.deconvolve(m,psf=psf)
         new_name = af.replace('lev1', 'levDecv')
-        m_decov.save(lvl1.path+'/'+new_name)
+        m_decov.save(lvl1_path+'/'+new_name)
         print('deconvolved: {} at {}'.format(str(m_decov.wavelength),str(m_decov.date)))
     
     return skipped_files
