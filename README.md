@@ -11,6 +11,7 @@ This informal document serves as a brief(?) introduction to our hackweek project
     - convert scipy.ndimage.affine_transform or skimage.transform.warp to dask-image equivalent
     - convert sunpy.map.contains_full_disk (?)
     - convert affine_transform or warp to GPU using CuPy?
+    - use OpenCV python package (e.g. [based on Raphael Attie's utilization](https://github.com/WaaallEEE/AIA-reloaded/blob/master/calibration.py))
 * PSF Deconvolution
     - test custom CuPy or Numba kernels against current CuPy implementation
     - develop pipeline of GPU asynchrononous memory transfer/deconvolution of multiple images concurrently
@@ -25,7 +26,7 @@ This informal document serves as a brief(?) introduction to our hackweek project
  
 The highest priority is probably the AIA Prep flow, but all of the paths are a worthy use of our time. We have enough people on the team that we can tackle multiple objectives, if so desired.
  
-*(The following sections borrow liberally from [the AIApy PSF Example](https://aiapy.readthedocs.io/en/latest/generated/gallery/skip_psf_deconvolution.html), the [AIApy prep example](https://aiapy.readthedocs.io/en/latest/generated/gallery/prepping_level_1_data.html), and the [AIApy source code](https://gitlab.com/LMSAL_HUB/aia_hub/aiapy); also see [Grigis et al. 2012](https://hesperia.gsfc.nasa.gov/ssw/sdo/aia/idl/psf/DOC/psfreport.pdf) for further PSF technical details. I thank Will Barnes for helpful discussions in understanding the basic challenges of accelerating AIApy.)*
+*(The following sections borrow liberally from [the AIApy PSF Example](https://aiapy.readthedocs.io/en/latest/generated/gallery/skip_psf_deconvolution.html), the [AIApy prep example](https://aiapy.readthedocs.io/en/latest/generated/gallery/prepping_level_1_data.html), and the [AIApy source code](https://gitlab.com/LMSAL_HUB/aia_hub/aiapy); also see [Grigis et al. 2012](https://hesperia.gsfc.nasa.gov/ssw/sdo/aia/idl/psf/DOC/psfreport.pdf) for further PSF technical details. I thank Will Barnes for helpful discussions in understanding the basic challenges of accelerating AIApy, and Raphael Attie for further discussion on the prep pipeline.)*
 
 ## 1. AIA Prep (Level 1 -> 1.5)
 ### Code Dive
@@ -64,6 +65,8 @@ tempmap = smap.rotate(recenter=True, scale=scale_factor.value,order=order,missin
 
 ### Acceleration
 In talking with Will (also see [this pull request](https://github.com/sunpy/sunpy/issues/3266)), it turns out that `smap.rotate` does not play nice with Dask. For our purposes, the key underlying function is `sunpy.image.transform.affine_transform`, which uses either `skimage.transform.warp` or `scipy.ndimage.interpolation.affine_transform`. However, although Sunpy does allow `smap` to use Dask arrays, there are no Dask equivalents for either `warp` or `affine_transformation`. One of our goals is thus to implement one (or both) of these into the Dask library (see the [related pull request](https://github.com/dask/dask-image/issues/24)). I am not aware of any progress on this, so we would have to essentially write these functions from scratch, test them, and make a pull request to the `dask-image` git repo. Alternatively, we could check for (or implement) CuPy/Numba versions of these affine transformation routines.
+
+Raphael Attie has implemented [a version of the prep package using OpenCV](https://github.com/WaaallEEE/AIA-reloaded/blob/master/calibration.py); he reports a speedup of about 10x on CPU. This may be another avenue to explore, and does look easier to incorporate into AIApy than Dask?
 
 *WARNING: the rest of this subsection is speculative from a non-Sunpy programmer/physicist. Feedback on this discussion would be helpful.*
 
