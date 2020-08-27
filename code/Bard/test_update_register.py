@@ -1,5 +1,22 @@
 # test update register functions; rudimentary timing
 
+"""
+local machine, WSL+Ubuntu:
+OG: ~12 sec
+JI, new cfd: ~3sec
+openCV: 1.5 sec 
+(no cupy)
+
+NVIDIA raplab:
+OG: ~8 sec
+JI, new cfd: ~2.1 sec
+(no openCV)
+cupy: either ~2.1 sec (first call) or 1.4 sec (subsequent)
+
+I think there's some caching going on for copying the array to GPU
+(but there is definitely improvement possible for the cupy implementation)
+"""
+
 import numpy as np
 import update_register as ur
 from aiapy.calibrate import register, update_pointing
