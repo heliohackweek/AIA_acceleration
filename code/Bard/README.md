@@ -14,7 +14,9 @@ This is a bunch of programs for AIA stuff.
 3. The Cupy implementation seems strangely slow. Needs further profiling and benchmarking; I suspect that my rudimentary %timeit profiling is not being fair towards the GPU functions (awaiting R. Attie's more detailed look).
 
 ## Timing results
-### single run
+NOTE: I did not use the `cupy.prof` profiler; so these may be slightly unfair to the cupy version. Needs more testing.
+
+### single run (test_update_register)
 local machine, WSL+Ubuntu:
 |version|time|
 |-----|-----|
@@ -33,7 +35,7 @@ NVIDIA raplab (v100):
 
 cupy takes some time to compile the kernel, which is why it takes longer the first call.
 
-### pipeline
+### basic pipeline (update_register_test_pipeline)
 on NVIDIA cluster (1 V100 GPU)
 for 10 images in serial, total_time:
 |version|time|
