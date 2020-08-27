@@ -3,15 +3,16 @@
 # and rudimentarily time it
 
 """
-on NVIDIA cluster (1 V100 GPU), for 5 images in serial, total time:
-OG: 49 s
-JI_cfd: 21s
-cupy: 17s
-
+on NVIDIA cluster (1 V100 GPU)
 for 10 images in serial, total_time:
-OG:  97s
-JI_cfd: 42s
-cupy: 32s
+OG, order 3:  97s
+OG, order 1:  91s
+JI_cfd, order 3: 42s
+JI_cfd, order 1: 36s
+cupy, order 1: 32s
+
+CONCLUSION: cupy (using straight replacement for scipy.nidmage.affine_transform) seems a bit slow? I need more detailed profiling (and perhaps better memory management)
+Also, the new implementation of contains_full_disk (cfd) should be put in aiapy.
 """
 
 import astropy.units as u
@@ -44,7 +45,7 @@ def gen_lvl_1p5(lvl1_fname_list,lvl1_path, lvl5_path=None):
     for af in lvl1_fname_list:
         m = sunpy.map.Map(lvl1_path+'/'+af)
         m_up = update_pointing(m)
-        m_reg = register(m_up)
+        m_reg = register(m_up, order=3)
         m_norm = sunpy.map.Map(m_reg.data/m_reg.exposure_time.to(u.s).value,
                                m_reg.meta)
         new_name = af.replace('lev1', 'lev1.5')
@@ -59,7 +60,7 @@ def gen_lvl_1p5_cfd(lvl1_fname_list,lvl1_path, lvl5_path=None):
     for af in lvl1_fname_list:
         m = sunpy.map.Map(lvl1_path+'/'+af)
         m_up = update_pointing(m)
-        m_reg = cfd_register(m_up)
+        m_reg = cfd_register(m_up, order=3)
         m_norm = sunpy.map.Map(m_reg.data/m_reg.exposure_time.to(u.s).value,
                                m_reg.meta)
         new_name = af.replace('lev1', 'lev1.5')
