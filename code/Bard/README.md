@@ -10,8 +10,8 @@ This is a bunch of programs for AIA stuff.
 
 `update_register` contains several attempts to speed up the `aia.calibrate.register` function. Some notes:
 1. `sunpy.map.maputils.contains_full_disk` needs to be rewritten, or at least have a faster version. I've used [Jack Ireland's implementation](https://github.com/wafels/sunpy/blob/faster_full_disk/sunpy/map/maputils.py#L149) (which was written during this hackweek!).
-2. Need to fix the current openCV implementation to get similar results as the current register+`sunpy.map.rotate` flow.
-3. The Cupy implementation seems strangely slow. Needs further profiling and benchmarking; I suspect that my rudimentary %timeit profiling is not being fair towards the GPU functions (awaiting R. Attie's more detailed look).
+2. Need to fix the current openCV implementation to get similar `map.data` output as the current register+`sunpy.map.rotate` flow (there's a possible bug in the pixel centering/handling?)
+3. The Cupy implementation seems strangely slow. Needs further profiling and benchmarking; I suspect that my rudimentary %timeit profiling is not being fair towards the GPU functions (awaiting R. Attie's more detailed look). Also, it is a very simple implementation and does not attempt optimization beyond copying data to GPU and running a `cupyx.scipy.ndimage.affine_transform`.
 
 ## Timing results
 NOTE: I did not use the `cupy.prof` profiler; so these may be slightly unfair to the cupy version. Needs more testing.
