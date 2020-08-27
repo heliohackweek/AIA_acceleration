@@ -561,7 +561,7 @@ def do_cupy_affine_transform(image, rmatrix, order=1, scale=1.0, image_center=No
     image = cupy.array(np.nan_to_num(image))
     rmatrix = cupy.array(rmatrix)
     rotated_image = cupy_affine_transform(
-        np.nan_to_num(image).T, rmatrix, offset=shift, order=order,
+        image.T, rmatrix, offset=shift, order=order,
         mode='constant', cval=missing).T
 
     
