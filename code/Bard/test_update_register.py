@@ -8,7 +8,7 @@ from timeit import default_timer as timer
 
 if __name__=='__main__':
     
-    path = './AIA_data/171A/aia_lev1_171a_2017_09_10t01_17_09_35z_image_lev1.fits'
+    path = './AIA_data/aia_lev1_171a_2017_09_10t01_17_09_35z_image_lev1.fits'
     
     m = sunpy.map.Map(path)
     start = timer()
