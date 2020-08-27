@@ -1,6 +1,5 @@
 #WARNING: all edge cases untested.
-# Able to reproduce behavior of aiapy.calibrate.register
-# but does not have same level of error checking
+#WARNING: still working on the CV_register function; currently does not get same results as the aiapy register function
 
 # Bare bones register function with some improvements
 # (courtesy of Jack Ireland, Raphael Attie, Chris Bard)
