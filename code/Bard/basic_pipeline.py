@@ -83,9 +83,13 @@ def gen_deconv(lvl1_fname_list, lvl1_path, lvldec_path=None):
         
 if __name__ == '__main__':
 
-    lvl1_path = 'AIA_data/'
+    #input file directory
+    lvl1_path = './AIA_data/'
+
+    #output file directories
     lvl1p5_path = 'AIA_data/lvl1.5/'
     lvldec_path = 'AIA_data/lvl_decv/'
+
     aia_files = scrape_AIA_files(lvl1_path)
 
     #for example, only do first five files

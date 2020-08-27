@@ -13,8 +13,8 @@ JI, new cfd: ~2.1 sec
 (no openCV)
 cupy: either ~2.1 sec (first call) or 1.4 sec (subsequent)
 
-I think there's some caching going on for copying the array to GPU
-(but there is definitely improvement possible for the cupy implementation)
+cupy takes some time to compile the kernel, which is why it takes longer the first call.
+See ./update_register_test_pipeline.py for a multiple-image serial reduction comparison
 """
 
 import numpy as np
