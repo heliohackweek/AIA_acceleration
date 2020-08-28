@@ -1,5 +1,7 @@
 """
 Calculate the point spread function (PSF) for the AIA telescopes
+
+Code implemented with suggestions and edit from Matthew Nicely of NVIDIA.
 """
 import numpy as np
 import astropy.units as u
