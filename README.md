@@ -1,4 +1,34 @@
-# Helio Hack Week Project Intro: Accelerate AIApy
+# Helio Hack Week 2020 Report: Team Accelerate AIApy
+_team: Chris Bard (GSFC, lead), Raphael Attie (GMU/GSFC), Will Barnes (NRL), Luiz Guedes dos Santos (CUA/GSFC), Jack Ireland (GSFC), Peter Schuck (GSFC), Paul Wright (Stanford), Jinwoong Yoo (UMD/GSFC)_
+
+_mentors: Matthew Nicely (NVIDIA), Zahra Ronaghi (NVIDIA)_
+
+_2020/08/26-28_
+
+## Results
+* Had fun!
+* Learned about CuPy/Numba GPU acceleration, GPU programming tips/methodology 
+* New merge request to AIApy; add `normalize_exposure function` (*Paul Wright*)
+* Experimented with analyzing time-stacked cubes of AIA data with Dask/CuPy (*Will Barnes, Zahra Ronaghi*)
+* [Faster version of `sunpy.map.maputils.contains_full_disk()`](https://github.com/wafels/sunpy/blob/faster_full_disk/sunpy/map/maputils.py#L149) (*Jack Ireland*)
+* Worked on profiling/accelerating basic AIApy processing pipeline with GPUs/Dali (*Peter Schuck, Will Barnes, Matthew Nicely*)
+    - [examples of loading FITS files with Dali](https://github.com/mnicely/dali_examples)
+* Experimented with Numba GPU-accelerated version of `aiapy.psf._psf` (*Luiz Guedes dos Santos, Jinwoong Yoo, Matthew Nicely*)
+* Experimented with GPU-accelerated version of `aiapy.psf.deconvolve` (*Matthew Nicely*)
+* Experimented with CuPy version of `aiapy.calibrate.register` (*Chris Bard*)
+* [Testing/timing different implementations](https://github.com/WaaallEEE/AIA_acceleration/tree/master/code/Bard) ([other tests here](./code/Bard/)) of `aiapy.calibrate.register` using J.I.'s `contains_full_disk`, openCV, and CuPy (*Raphael Attie, Chris Bard*)
+
+
+## Take aways
+* Profiling is your best friend. 
+* New version of `contains_full_disk` is much better for AIA data prep; this could be put into AIA (or else merged into sunpy)
+* Sunpy has some overhead which could be streamlined or removed for AIA-specific cases (future: will raise an issue at the AIApy repo)
+* Doing the reduction pipeline using GPUs promises to be the fastest for large datasets.
+
+---
+_project introduction, additional project ideas below_
+
+## Helio Hack Week Project Intro: Accelerate AIApy
 _author: Chris Bard_
 
 _2020/08/12_
