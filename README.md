@@ -9,7 +9,7 @@ _2020/08/26-28_
 * Had fun!
 * Learned about CuPy/Numba GPU acceleration, GPU programming tips/methodology 
 * New merge request to AIApy; add `normalize_exposure function` (*Paul Wright*)
-* Experimented with analyzing time-stacked cubes of AIA data with Dask/CuPy (*Will Barnes, Zahra Ronaghi*)
+* [Experimented with analyzing time-stacked cubes of AIA data with Dask/CuPy](https://github.com/wtbarnes/AIA_acceleration/tree/master/code/barnes) (*Will Barnes, Zahra Ronaghi*)
 * [Faster version of `sunpy.map.maputils.contains_full_disk()`](https://github.com/wafels/sunpy/blob/faster_full_disk/sunpy/map/maputils.py#L149) (*Jack Ireland*)
 * Worked on profiling/accelerating basic AIApy processing pipeline with GPUs/Dali (*Peter Schuck, Will Barnes, Matthew Nicely*)
     - [examples of loading FITS files with Dali](https://github.com/mnicely/dali_examples)
