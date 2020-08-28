@@ -22,7 +22,7 @@ local machine, WSL+Ubuntu:
 |-----|-----|
 |OG| ~12 sec|
 |JI, new cfd| ~3sec|
-|openCV| 1.5 sec |
+|openCV + new cfd| 1.5 sec |
 |(no cupy)|N/A|
 
 NVIDIA raplab (v100):
