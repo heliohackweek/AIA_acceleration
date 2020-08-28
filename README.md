@@ -24,7 +24,11 @@ _2020/08/26-28_
 * New version of `contains_full_disk` is much better for AIA data prep; this could be put into AIA (or else merged into sunpy)
 * Sunpy has some overhead which could be streamlined or removed for AIA-specific cases (future: will raise an issue at the AIApy repo)
 * Doing the reduction pipeline using GPUs promises to be the fastest for large datasets.
-
+    - Caveat: we currently have OpenCV `register` function faster than CuPy `register`(both faster than current AIApy)
+    - OpenCV has third order interpolation, CuPy version only supports 0th or 1st order
+    - psf calculation faster with Numba
+    - psf deconvolution with CuPy under construction, but looks like it will be faster (also see Mark Cheung's implementation of R-L deconvolution on GPUs with CUDA)
+  - pipeline under construction: lvl1 -> GPU psf deconvolution -> CPU openCV register -> level 2(?)
 ---
 _project introduction, additional project ideas below_
 
