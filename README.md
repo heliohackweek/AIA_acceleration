@@ -16,7 +16,7 @@ _2020/08/26-28_
 * Experimented with Numba GPU-accelerated version of `aiapy.psf._psf` (*Luiz Guedes dos Santos, Jinwoong Yoo, Matthew Nicely*)
 * Experimented with GPU-accelerated version of `aiapy.psf.deconvolve` (*Matthew Nicely*)
 * Experimented with CuPy version of `aiapy.calibrate.register` (*Chris Bard*)
-* [Testing/timing different implementations](https://github.com/WaaallEEE/AIA_acceleration/tree/master/code/Bard) ([other tests here](./code/Bard/)) of `aiapy.calibrate.register` using J.I.'s `contains_full_disk`, openCV, and CuPy (*Raphael Attie, Chris Bard*)
+* [Testing/timing different implementations](https://github.com/WaaallEEE/AIA_acceleration/blob/master/code/Bard/timeit_profiling.ipynb) ([other tests here](./code/Bard/)) of `aiapy.calibrate.register` using J.I.'s `contains_full_disk`, openCV, and CuPy (*Raphael Attie, Chris Bard*)
 
 
 ## Take aways
