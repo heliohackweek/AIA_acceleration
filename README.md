@@ -15,7 +15,7 @@ _2020/08/26-28_
     - [examples of loading FITS files with Dali](https://github.com/mnicely/dali_examples)
 * Experimented with Numba GPU-accelerated version of `aiapy.psf._psf` (*Luiz Guedes dos Santos, Jinwoong Yoo, Matthew Nicely*)
 * Experimented with GPU-accelerated version of `aiapy.psf.deconvolve` (*Matthew Nicely*)
-* Experimented with CuPy version of `aiapy.calibrate.register` (*Chris Bard*)
+* [Experimented with updating `aiapy.calibrate.register` with CuPy](./code/Bard/update_register.py) (*Chris Bard*)
 * [Testing/timing different implementations](https://github.com/WaaallEEE/AIA_acceleration/blob/master/code/Bard/timeit_profiling.ipynb) ([other tests here](./code/Bard/)) of `aiapy.calibrate.register` using J.I.'s `contains_full_disk`, openCV, and CuPy (*Raphael Attie, Chris Bard*)
 
 
